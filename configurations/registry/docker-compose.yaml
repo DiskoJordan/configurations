@@ -1,0 +1,21 @@
+version: '3'
+services:
+  registry:
+    restart: always
+    image: registry:2
+    ports:
+      - 443:5000
+    volumes:
+      - ./var/lib/registry:/var/lib/registry
+      - ./config.yaml:/etc/docker/registry/config.yml
+      - ./certs:/certs
+  registry-ui:
+    image: konradkleine/docker-registry-frontend:v2
+    environment:
+      - ENV_DOCKER_REGISTRY_HOST=registry.disko.love
+      - ENV_DOCKER_REGISTRY_PORT=443
+      - ENV_DOCKER_REGISTRY_USE_SSL=1
+      - ENV_DEFAULT_REPOSITORIES_PER_PAGE=100
+    ports:
+      - 80:80
+      

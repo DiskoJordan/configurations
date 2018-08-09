@@ -1,0 +1,32 @@
+version: 0.1
+log:
+  fields:
+    service: registry
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+  delete:
+    enabled: true
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
+http:
+  addr: 0.0.0.0:5000
+  host: https://registry.disko.love:443
+  secret: everythingislove
+  headers:
+    X-Content-Type-Options: [nosniff]
+  # Letsencrypt is not working for months (today it's 08/09/2018)
+  # Still waiting for news about this because at this point we just know
+  # Letsencrypt teams disabled tls-alpn-01 challenge and Docker built-in letsencrypt capability is based on this...
+  #tls:
+  #  letsencrypt:
+  #    cachefile: /root/.letsencrypt-cache-file
+  #    email: tech@disko.fr
+  tls:
+    certificate: /certs/domain.crt
+    key: /certs/domain.key
