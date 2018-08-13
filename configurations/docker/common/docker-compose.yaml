@@ -14,7 +14,7 @@ services:
       - "traefik.backend=portainer"
       - "traefik.frontend.rule=Host:portainer.localhost,overview.localhost"
     volumes:
-      - ./portainer/data:/data/
+      #- ./portainer/data:/data/
       - /var/run/docker.sock:/var/run/docker.sock
   reverse-proxy:
     networks:
@@ -31,9 +31,9 @@ services:
       - "traefik.backend=reverse-proxy.localhost"
       - "traefik.frontend.rule=Host:reverse-proxy.localhost,rp.localhost"
     volumes:
-      - "./traefik/traefik.toml:/etc/traefik/traefik.toml"
+      #- "./traefik/traefik.toml:/etc/traefik/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./traefik/acme.json:/etc/traefik/acme.json"
+      #- "./traefik/acme.json:/etc/traefik/acme.json"
   disko-application:
     networks: 
       disko:
