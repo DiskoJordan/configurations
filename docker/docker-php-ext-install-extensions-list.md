@@ -1,7 +1,7 @@
 # List of php extensions to be installed
 ## date: 08/07/2018
 
-- bcmath
+ - bcmath
  - bz2
  - calendar
  - ctype

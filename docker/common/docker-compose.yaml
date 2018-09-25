@@ -9,10 +9,6 @@ services:
     image: portainer/portainer
     networks:
       disko:
-    labels:
-      - "traefik.port=9000"
-      - "traefik.backend=portainer"
-      - "traefik.frontend.rule=Host:portainer.localhost,overview.localhost"
     volumes:
       - ./portainer/data:/data/
       - /var/run/docker.sock:/var/run/docker.sock
@@ -20,16 +16,11 @@ services:
     networks:
       disko:
     image: traefik:1.7-alpine
-    command: --docker
+    command: --consulcatalog.endpoint=consul:8500
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.port=8080"
-      - "traefik.backend=reverse-proxy.localhost"
-      - "traefik.frontend.rule=Host:reverse-proxy.localhost,rp.localhost"
     volumes:
       - "./traefik/traefik.toml:/etc/traefik/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -39,12 +30,19 @@ services:
       disko:
     image: registry.disko.love:443/disko/base
     command: tail -f /dev/null
-    labels:
-      - "traefik.enable=true"
-      - "traefik.port=9999"
-      - "traefik.backend=base"
-      - "traefik.frontend.rule=Host:base.localhost"
     volumes:
       - "./certs:/certs"
+  consul:
+    image: consul
+    command: consul agent -server -dev -client=0.0.0.0 -ui -bootstrap -log-level warn
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+  registrator:
+    image: gliderlabs/registrator:master
+    command: -ip 10.0.0.30 consul://consul:8500
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
 
     
