@@ -33,23 +33,30 @@ defaultEntryPoints = ["http", "https"]
 # Optional
 # Default:
 [entryPoints]
-    [entryPoints.http]
-      address = ":80"
+  [entryPoints.http]
+    address = ":80"
+    # Comment out the following two lines to redirect HTTP to HTTPS.
     [entryPoints.http.redirect]
       entryPoint = "https"
-    [entryPoints.https]
-      address = ":443"
-      [entryPoints.https.tls]
+  [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
 
 [acme]
-email = "tech@disko.fr"
-storage = "/etc/traefik/acme.json"
+#email = "tech@disko.fr"
+#storage = "/etc/traefik/acme.json"
 #caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
-entryPoint = "https"
-onDemand = false
+#entryPoint = "https"
+#onDemand = false
+#onHostRule = true
+#  [acme.httpChallenge]
+#    entryPoint = "http"
+storage = "/etc/traefik/acme.json"
 onHostRule = true
+onDemand = false
+entryPoint = "https"
   [acme.httpChallenge]
-    entryPoint = "http"
+  entryPoint = "http"
 
 ################################################################
 # Traefik logs configuration
@@ -159,7 +166,8 @@ onHostRule = true
 # Optional
 # Default: ""
 #
-domain = "localhost"
+domain = "docker.localhost"
+#domain = "losange.disko.love"
 
 # Expose containers by default in traefik
 #
