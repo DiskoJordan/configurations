@@ -153,6 +153,9 @@ onHostRule = true
 #
 # endpoint = "tcp://10.10.10.10:2375"
 
+watch = true
+network = "disko"
+
 # Default domain used.
 # Can be overridden by setting the "traefik.domain" label on a container.
 #

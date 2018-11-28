@@ -1,0 +1,4 @@
+version: '3'
+services:
+  application:
+    image: registry.disko.love:443/application/wordpress:4.9.8-base
