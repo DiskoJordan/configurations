@@ -5,44 +5,20 @@ networks:
     external: true
 
 services:
-  portainer:
-    image: portainer/portainer
-    networks:
-      disko:
-    volumes:
-      - ./portainer/data:/data/
-      - /var/run/docker.sock:/var/run/docker.sock
   reverse-proxy:
     networks:
       disko:
     image: traefik:1.7-alpine
-    command: --consulcatalog.endpoint=consul:8500
+    command: --docker --acme.email="tech@disko.fr"
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=8080"
+      #- "traefik.protocol=https"
+      - "traefik.frontend.rule=Host:losange.disko.love;PathPrefixStrip: /rp/"
     volumes:
       - "./traefik/traefik.toml:/etc/traefik/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./traefik/acme.json:/etc/traefik/acme.json"
-  disko-application:
-    networks: 
-      disko:
-    image: registry.disko.love:443/disko/base
-    command: tail -f /dev/null
-    volumes:
-      - "./certs:/certs"
-  consul:
-    image: consul
-    command: consul agent -server -dev -client=0.0.0.0 -ui -bootstrap -log-level warn
-    ports:
-      - "8400:8400"
-      - "8500:8500"
-      - "8600:53/udp"
-  registrator:
-    image: gliderlabs/registrator:master
-    command: -ip 10.0.0.30 consul://consul:8500
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
-
-    
